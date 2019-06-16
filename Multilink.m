@@ -68,7 +68,7 @@ vinit = v; % v will be changed later in iteration and we want vinit to remain un
 % steering/cambering) in a local upright coordinate system and later
 % transform it back to evaluate camber/toe/etc and help with plotting.
 % origin of this coordinate frame will be pup.LRO
-upB = [v(:,2)/norm(v(:,2)) v(:,3)/norm(v(:,3)) cross(v(:,2), v(:,3)) / norm(cross(v(:,2), v(:,3)))];
+upB = [v(:,3)/norm(v(:,3)) v(:,5)/norm(v(:,5)) cross(v(:,3), v(:,5)) / norm(cross(v(:,3), v(:,5)))];
 
 % define the wheel normal and wheel centre and geometric contact patch in
 % unperturbed state
@@ -209,7 +209,7 @@ for j = 1:length(steering_range)
 
     % recompute the upright basis transformation matrix with the final upright
     % position vectors
-    upB_dyn = [v(:,2)/norm(v(:,2)) v(:,3)/norm(v(:,3)) cross(v(:,2), v(:,3)) / norm(cross(v(:,2), v(:,3)))];
+    upB_dyn = [v(:,3)/norm(v(:,3)) v(:,5)/norm(v(:,5)) cross(v(:,3), v(:,5)) / norm(cross(v(:,3), v(:,5)))];
     
     % apply the wheel centre position and wheel plane normal given in the
     % upright basis to that matrix to get it in global coordinates
