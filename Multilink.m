@@ -88,7 +88,7 @@ cp_geo_LRO_upB = upB\cp_geo_LRO;
 %% set up sim
 
 % steering rack travel input
-steering_range = -10:0.5:10;
+steering_range = 12:-1:-12;
 
 % set numerical damping factor of the iterations
 lambda = 1.72; % when recomputing the jacobian; this is optimal for some reason based on trial and error (1.72 for fwd diff, 3.44 for central diff)
@@ -138,7 +138,7 @@ for j = 1:length(steering_range)
 
     %% iterate
     i = 1;
-    while max(abs(E)) > 1e-2 && i < 500
+    while max(abs(E)) > 1e-2 && i < 70
 
         % evaluate error between current position of the outer pickup
         % points on the upright and current position of the outer pickup
@@ -195,7 +195,14 @@ for j = 1:length(steering_range)
     % save the converged pickup points. The choice of _l or _u is arbitrary
     % and actually the mean between the two could make this entire thing
     % more precise? Or does that actually violate the asserts?
-    Opups_dyn(:,j) = (Opups_l);
+    if max(abs(E)) < 1e-2
+        Opups_dyn(:,j) = (Opups_l);
+    else
+        warning(strcat("Probable lock-up at ", num2str(steering_range(j))) )
+        Opups_dyn(:,j) = zeros(size(Opups_l));
+    end
+    
+    
     
     
     %% post-processing -- compute wheelplane
@@ -241,7 +248,7 @@ if animate
     js = [1:length(steering_range) length(steering_range)-1:-1:2];
     
     % time per frame, a bit arbitrary...
-    dt = mean(diff(steering_range))/10;
+    dt = abs(mean(diff(steering_range)))/10;
 
     % go
     tic
